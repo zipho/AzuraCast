@@ -21,6 +21,9 @@ COPY --from=azuracast/azuracast_golang_deps:latest /usr/local/bin/sftpgo /usr/lo
 # Install Dockerize
 COPY --from=azuracast/azuracast_golang_deps:latest /usr/local/bin/dockerize /usr/local/bin/dockerize
 
+# Install Roadrunner
+COPY --from=azuracast/azuracast_golang_deps:latest /usr/local/bin/rr /usr/local/bin/rr
+
 #
 # START Operations as `azuracast` user
 #

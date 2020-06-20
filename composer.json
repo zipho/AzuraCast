@@ -76,7 +76,8 @@
     "symfony/validator": "^4.3",
     "voku/portable-utf8": "^5.4",
     "wikimedia/composer-merge-plugin": "^1.4",
-    "zircote/swagger-php": "dev-master#e61cfa2a4f8d7cc4356ba7450647844463ee7407"
+    "zircote/swagger-php": "dev-master#e61cfa2a4f8d7cc4356ba7450647844463ee7407",
+    "spiral/roadrunner": "^1.8"
   },
   "require-dev": {
     "codeception/codeception": "^4.0",

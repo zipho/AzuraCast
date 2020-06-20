@@ -1,0 +1,12 @@
+http:
+  address:    0.0.0.0:8080
+  workers:
+    command:  "php ../www/util/psr-worker.php"
+    pool:
+{{if eq .Env.APPLICATION_ENV "developmentaco" }}
+      numWorkers: 1
+      maxJobs: 1
+{{else}}
+      numWorkers: {{ default .Env.PHP_FPM_MAX_CHILDREN "5" }}
+      maxJobs: 100
+{{end}}
