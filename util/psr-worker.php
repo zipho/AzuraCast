@@ -1,23 +1,14 @@
 <?php
-ini_set('display_errors', 'stderr');
-error_reporting(E_ALL);
-chdir(__DIR__);
-set_error_handler(function ($severity, $message, $file, $line) {
-    throw new ErrorException($message, 0, $severity, $file, $line);
-});
+$autoloader = require __DIR__ . '/../vendor/autoload.php';
 
-require __DIR__ . '/../vendor/autoload.php';
-
-$worker = new RoadRunner\Worker(new Goridge\StreamRelay(STDIN, STDOUT));
-$psr7 = new RoadRunner\PSR7Client($worker);
+$worker = new Spiral\RoadRunner\Worker(new Spiral\Goridge\StreamRelay(STDIN, STDOUT));
+$client = new Spiral\RoadRunner\PSR7Client($worker);
 
 $app = App\AppFactory::create($autoloader, [
     App\Settings::BASE_DIR => dirname(__DIR__),
 ]);
 
-$app->run();
-
-while ($request = $psr7->acceptRequest()) {
+while ($request = $client->acceptRequest()) {
     try {
         $response = $app->handle($request);
         $client->respond($response);

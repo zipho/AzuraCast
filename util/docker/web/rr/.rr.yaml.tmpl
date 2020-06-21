@@ -1,9 +1,11 @@
 http:
-  address:    0.0.0.0:8080
+  fcgi:
+    address: tcp://0.0.0.0:9000
   workers:
+    user: "azuracast"
     command:  "php ../www/util/psr-worker.php"
     pool:
-{{if eq .Env.APPLICATION_ENV "developmentaco" }}
+{{if eq .Env.APPLICATION_ENV "development"}}
       numWorkers: 1
       maxJobs: 1
 {{else}}

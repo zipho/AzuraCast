@@ -7,7 +7,7 @@ use Slim\Interfaces\ServerRequestCreatorInterface;
 
 class ServerRequestFactory extends \Http\Factory\Guzzle\ServerRequestFactory implements ServerRequestCreatorInterface
 {
-    protected static $serverRequestClass = \App\Http\ServerRequest::class;
+    protected static string $serverRequestClass = \App\Http\ServerRequest::class;
 
     public static function setServerRequestClass(string $class): void
     {
@@ -27,6 +27,10 @@ class ServerRequestFactory extends \Http\Factory\Guzzle\ServerRequestFactory imp
      */
     public function decorateServerRequest(ServerRequestInterface $request): ServerRequestInterface
     {
+        if ($request instanceof self::$serverRequestClass) {
+            return $request;
+        }
+
         return new self::$serverRequestClass($request);
     }
 

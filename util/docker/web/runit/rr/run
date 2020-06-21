@@ -1,3 +1,4 @@
 #!/bin/bash
 
-sudo -E -u azuracast rr /var/azuracast/rr/.rr.yaml
+cd /var/azuracast/rr
+rr serve
