@@ -353,6 +353,33 @@ return [
         ]);
     },
 
+    // FFMpeg
+    App\FFMpeg\Configuration::class => function () {
+        return new App\FFMpeg\Configuration([
+            'ffmpeg.threads' => 4,
+            'ffmpeg.timeout' => 300,
+            'ffmpeg.binaries' => ['avconv', 'ffmpeg'],
+            'ffprobe.timeout' => 30,
+            'ffprobe.binaries' => ['avprobe', 'ffprobe'],
+        ]);
+    },
+
+    FFMpeg\FFProbe::class => function (
+        App\FFMpeg\Configuration $config,
+        Doctrine\Common\Cache\Cache $cache,
+        Psr\Log\LoggerInterface $logger
+    ) {
+        return FFMpeg\FFProbe::create($config, $logger, $cache);
+    },
+
+    FFMpeg\FFMpeg::class => function (
+        App\FFMpeg\Configuration $config,
+        FFMpeg\FFProbe $ffProbe,
+        Psr\Log\LoggerInterface $logger
+    ) {
+        return FFMpeg\FFMpeg::create($config, $logger, $ffProbe);
+    },
+
     // Supervisor manager
     Supervisor\Supervisor::class => function (Settings $settings) {
         $client = new fXmlRpc\Client(
