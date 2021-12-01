@@ -95,6 +95,7 @@
                 <p class="mb-0">{{ rowFile.metadata.artist ? rowFile.metadata.artist : lang_unknown_artist }}</p>
             </a>
         </div>
+        <VeritiezSongs />
     </div>
 </template>
 
@@ -102,9 +103,11 @@
 import track from './Track.js';
 import _ from 'lodash';
 import Icon from '../../Common/Icon';
+import VeritiezSongs from './VeritiezApi'
+
 
 export default {
-    components: { Icon },
+    components: { Icon, VeritiezSongs },
     extends: track,
     data () {
         return {

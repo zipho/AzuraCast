@@ -1,7 +1,7 @@
 FROM library/node:lts-alpine
 
 RUN apk update \
-    && apk add bash python make curl g++ shadow
+    && apk add bash python3 make curl g++ shadow
 
 RUN groupdel dialout
 
