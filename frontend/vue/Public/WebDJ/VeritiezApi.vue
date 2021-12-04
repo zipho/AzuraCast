@@ -10,7 +10,14 @@
 <script>
 
 import axios from "axios";
-import 'regenerator-runtime/runtime'
+import 'regenerator-runtime/runtime';
+import Cookies from 'js-cookie';
+
+var csrfCookie = Cookies.get('csrftoken'); 
+console.log('csrf cookie: ', csrfCookie); // set to undefined
+
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 export default {
     name: 'VeritiezSongs',
     data() { 
@@ -22,7 +29,12 @@ export default {
         try {
             var result = await axios({
                 method: "POST",
-                url: "http://127.0.0.1:8000/graphql",
+                xstfCookieName: 'csrftoken',
+                xsrfHeaderName: 'X-CSRFToken',
+                headers: {
+                            'X-CSRFToken': csrfCookie,
+                        }, 
+                url: "http://localhost:8000/graphql",
                 data: {
                     query: `
                     {
@@ -35,7 +47,6 @@ export default {
                     `
                 }
             });
-            console.log("results: Zipho");
             this.songs = result.data.data.allAudio;
         } catch (error) {
             console.error(error);
