@@ -39,11 +39,11 @@ export default {
         try {
             var result = await axios({
                 method: "POST",
-                // xstfCookieName: 'csrftoken',
-                // xsrfHeaderName: 'X-CSRFToken',
-                // headers: {
-                //             'X-CSRFToken': csrfCookie,
-                //         }, 
+                xstfCookieName: 'csrftoken',
+                xsrfHeaderName: 'X-CSRFToken',
+                headers: {
+                            'X-CSRFToken': csrfCookie
+                        }, 
                 url: "http://localhost:8000/graphql/",
                 data: {
                     query: `
@@ -57,7 +57,7 @@ export default {
                     `
                 }
             });
-            this.song = result.data.data.allAudio;
+            this.songs = result.data.data.allAudio;
         } catch (error) {
             console.error(error);
         }
@@ -111,7 +111,7 @@ export default {
             }
 
             this.prepare();
-
+            debugger;
             return this.getStream().createFileSource(this.song, this, (source) => {
                 var ref1;
                 this.source = source;
@@ -136,34 +136,34 @@ export default {
             });
         },
 
-        // selectFile (options = {}) {
-        //     if (this.songs.length === 0) {
-        //         return;
-        //     }
+        selectFile (options = {}) {
+            if (this.songs.length === 0) {
+                return;
+            }
 
-            // if (options.fileIndex) {
-            //     this.fileIndex = options.fileIndex;
-            // } else {
-            //     this.fileIndex += options.backward ? -1 : 1;
-            //     if (this.fileIndex < 0) {
-            //         this.fileIndex = this.songs.length - 1;
-            //     }
+            if (options.fileIndex) {
+                this.fileIndex = options.fileIndex;
+            } else {
+                this.fileIndex += options.backward ? -1 : 1;
+                if (this.fileIndex < 0) {
+                    this.fileIndex = this.songs.length - 1;
+                }
 
-            //     if (this.fileIndex >= this.songs.length) {
-            //         if (options.isAutoPlay && !this.loop) {
-            //             this.fileIndex = -1;
-            //             return;
-            //         }
+                if (this.fileIndex >= this.songs.length) {
+                    if (options.isAutoPlay && !this.loop) {
+                        this.fileIndex = -1;
+                        return;
+                    }
 
-            //         if (this.fileIndex < 0) {
-            //             this.fileIndex = this.songs.length - 1;
-            //         } else {
-            //             this.fileIndex = 0;
-            //         }
-            //     }
-            // }
-           /*  return this.songs[this.fileIndex];
-        } */
+                    if (this.fileIndex < 0) {
+                        this.fileIndex = this.songs.length - 1;
+                    } else {
+                        this.fileIndex = 0;
+                    }
+                }
+            }
+             return this.songs[this.fileIndex];
+        } 
     }
 };
 </script>
