@@ -1,0 +1,160 @@
+{
+  "AdminBranding.js": "dist/AdminBranding.js",
+  "AdminStorageLocations.js": "dist/AdminStorageLocations.js",
+  "Dashboard.js": "dist/Dashboard.js",
+  "InlinePlayer.js": "dist/InlinePlayer.js",
+  "PublicFullPlayer.js": "dist/PublicFullPlayer.js",
+  "PublicHistory.js": "dist/PublicHistory.js",
+  "PublicOnDemand.js": "dist/PublicOnDemand.js",
+  "PublicPlayer.js": "dist/PublicPlayer.js",
+  "PublicRequests.js": "dist/PublicRequests.js",
+  "PublicSchedule.js": "dist/PublicSchedule.js",
+  "PublicWebDJ.js": "dist/PublicWebDJ.js",
+  "StationsMedia.js": "dist/StationsMedia.js",
+  "StationsMounts.js": "dist/StationsMounts.js",
+  "StationsPlaylists.js": "dist/StationsPlaylists.js",
+  "StationsPodcasts.js": "dist/StationsPodcasts.js",
+  "StationsProfile.js": "dist/StationsProfile.js",
+  "StationsQueue.js": "dist/StationsQueue.js",
+  "StationsRemotes.js": "dist/StationsRemotes.js",
+  "StationsReportsOverview.js": "dist/StationsReportsOverview.js",
+  "StationsStreamers.js": "dist/StationsStreamers.js",
+  "VueTranslations.js": "dist/VueTranslations.js",
+  "entrypoints": {
+    "VueTranslations": {
+      "js": [
+        "dist/vendor.js",
+        "dist/VueTranslations.js"
+      ]
+    },
+    "InlinePlayer": {
+      "js": [
+        "dist/vendor.js",
+        "dist/InlinePlayer.js"
+      ]
+    },
+    "Dashboard": {
+      "js": [
+        "dist/vendor.js",
+        "dist/Dashboard.js"
+      ]
+    },
+    "AdminBranding": {
+      "js": [
+        "dist/vendor.js",
+        "dist/AdminBranding.js"
+      ]
+    },
+    "AdminStorageLocations": {
+      "js": [
+        "dist/vendor.js",
+        "dist/AdminStorageLocations.js"
+      ]
+    },
+    "PublicFullPlayer": {
+      "js": [
+        "dist/vendor.js",
+        "dist/PublicFullPlayer.js"
+      ]
+    },
+    "PublicHistory": {
+      "js": [
+        "dist/vendor.js",
+        "dist/PublicHistory.js"
+      ]
+    },
+    "PublicOnDemand": {
+      "js": [
+        "dist/vendor.js",
+        "dist/PublicOnDemand.js"
+      ]
+    },
+    "PublicPlayer": {
+      "js": [
+        "dist/vendor.js",
+        "dist/PublicPlayer.js"
+      ]
+    },
+    "PublicRequests": {
+      "js": [
+        "dist/vendor.js",
+        "dist/PublicRequests.js"
+      ]
+    },
+    "PublicSchedule": {
+      "js": [
+        "dist/vendor-moment.js",
+        "dist/vendor-fullcalendar.js",
+        "dist/vendor.js",
+        "dist/PublicSchedule.js"
+      ]
+    },
+    "PublicWebDJ": {
+      "js": [
+        "dist/vendor.js",
+        "dist/PublicWebDJ.js"
+      ]
+    },
+    "StationsMedia": {
+      "js": [
+        "dist/vendor.js",
+        "dist/StationsMedia.js"
+      ]
+    },
+    "StationsMounts": {
+      "js": [
+        "dist/vendor.js",
+        "dist/StationsMounts.js"
+      ]
+    },
+    "StationsPlaylists": {
+      "js": [
+        "dist/vendor-moment.js",
+        "dist/vendor-fullcalendar.js",
+        "dist/vendor.js",
+        "dist/StationsPlaylists.js"
+      ]
+    },
+    "StationsPodcasts": {
+      "js": [
+        "dist/vendor.js",
+        "dist/StationsPodcasts.js"
+      ]
+    },
+    "StationsProfile": {
+      "js": [
+        "dist/vendor.js",
+        "dist/StationsProfile.js"
+      ]
+    },
+    "StationsQueue": {
+      "js": [
+        "dist/vendor.js",
+        "dist/StationsQueue.js"
+      ]
+    },
+    "StationsRemotes": {
+      "js": [
+        "dist/vendor.js",
+        "dist/StationsRemotes.js"
+      ]
+    },
+    "StationsStreamers": {
+      "js": [
+        "dist/vendor-moment.js",
+        "dist/vendor-fullcalendar.js",
+        "dist/vendor.js",
+        "dist/StationsStreamers.js"
+      ]
+    },
+    "StationsReportsOverview": {
+      "js": [
+        "dist/vendor.js",
+        "dist/StationsReportsOverview.js"
+      ]
+    }
+  },
+  "vendor-fullcalendar.js": "dist/vendor-fullcalendar.js",
+  "vendor-moment.js": "dist/vendor-moment.js",
+  "vendor.js": "dist/vendor.js"
+}

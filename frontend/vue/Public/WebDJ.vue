@@ -23,6 +23,9 @@
                     <playlist-panel id="playlist_2"></playlist-panel>
                 </div>
             </div>
+            <div class="col-md-16">
+                <v-sounds-panel></v-sounds-panel>
+            </div>
         </div>
     </div>
 </template>
@@ -31,6 +34,7 @@
 import MixerPanel from './WebDJ/MixerPanel.vue';
 import MicrophonePanel from './WebDJ/MicrophonePanel.vue';
 import PlaylistPanel from './WebDJ/PlaylistPanel.vue';
+import vSoundsPanel from './WebDJ/vSoundsPanel.vue';
 import SettingsPanel from './WebDJ/SettingsPanel.vue';
 
 import Stream from './WebDJ/Stream.js';
@@ -45,6 +49,7 @@ export default {
         MixerPanel,
         MicrophonePanel,
         PlaylistPanel,
+        vSoundsPanel,
         SettingsPanel
     },
     props: {

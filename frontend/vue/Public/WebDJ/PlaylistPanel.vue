@@ -95,7 +95,6 @@
                 <p class="mb-0">{{ rowFile.metadata.artist ? rowFile.metadata.artist : lang_unknown_artist }}</p>
             </a>
         </div>
-        <VeritiezSongs />
     </div>
 </template>
 
@@ -103,11 +102,10 @@
 import track from './Track.js';
 import _ from 'lodash';
 import Icon from '../../Common/Icon';
-import VeritiezSongs from './VeritiezApi'
 
 
 export default {
-    components: { Icon, VeritiezSongs },
+    components: { Icon },
     extends: track,
     data () {
         return {
@@ -198,6 +196,7 @@ export default {
         },
 
         addNewFiles (newFiles) {
+            console.log(newFiles)
             _.each(newFiles, (file) => {
                 file.readTaglibMetadata((data) => {
                     this.files.push({
