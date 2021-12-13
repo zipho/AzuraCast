@@ -2,7 +2,7 @@
     <div class="card text-white bg-primary mb-3">
          <div class="card-header">
             <h5 class="card-title text-white">
-                <translate key="lang_vsounds_title">vSounds Music</translate>
+                <translate key="lang_vsounds_title">vSounds Music Widget</translate>
             </h5>
         </div>
         <div class="card-body">
@@ -15,7 +15,7 @@
                             </svg>
                         </span>
                     </div>
-                    <div
+                    <div id="dropzone"
                         draggable="true"
                         @dragover.prevent="tts"
                         @drop.prevent="ttrs"
@@ -44,16 +44,23 @@
             </div>
             
             <div class="list-group list-group-flush" v-if="songs.length > 0">
-                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start"
-                    v-for="(rowFile, rowIndex) in songs" v-bind:class="{ active: rowIndex == fileIndex }"
-                    v-on:click.prevent="play({ fileIndex: rowIndex })">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-0">{{
-                                rowFile.title ? rowFile.title : lang_unknown_title
-                            }}</h5>
-                        <small class="pt-1">{{ rowFile.song.length | prettifyTime }}</small>
-                    </div>                
-                    <p class="mb-0">- by {{ rowFile.artist ? rowFile.artist : lang_unknown_artist }}</p>
+                <a
+                    class="drag-el list-group-item list-group-item-action flex-column align-items-start"
+                    v-for="(songItem, songIndex) in songs"
+                    :key="songIndex"
+                    href="#"
+                    v-bind:id="'song_num_'+songIndex"
+                    v-bind:file="songItem['audio_file']" 
+                    draggable
+                    @dragstart="startDrag($event, songItem)"  
+                >
+                        <div  class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-0">{{
+                                    songItem['title'] ? songItem['title'] : lang_unknown_title
+                                }}
+                            </h5>
+                        </div>                
+                        <p class="mb-0">- by {{ songItem['artist_name'] ? songItem['artist_name'] : lang_unknown_artist }}</p>
                 </a>
             </div>
         </div>
@@ -67,15 +74,14 @@ import 'regenerator-runtime/runtime';
 import Cookies from 'js-cookie';
 import track from './Track.js';
 import Icon from '../../Common/Icon';
-
+import VueLazyload from 'vue-lazyload'
+ 
+Vue.use(VueLazyload)
 
 var csrfCookie = Cookies.get('csrftoken'); 
-console.log('csrf cookie: ', csrfCookie); // set to undefined
-
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 export default {
-    //name: 'VeritiezSongs',
     components: { Icon },
     extends: track,
     data() { 
@@ -104,21 +110,21 @@ export default {
                     query: `
                     {
                         allAudio {
-                          id,
-                          title,
-                          song
+                          key
+                          value
                         }
                       }
                     `
                 }
             });
-            this.songs = result.data.data.allAudio;
-            //this.addNewFiles(this.songs)
+            let results = result.data.data.allAudio;
+            this.songs = await this.genSongObject(results);
         } catch (error) {
             console.error(error);
         };
+
         let vm = this;
-        window.addEventListener("dragdrop", this.testfunc, false);
+       
         
         document.addEventListener("dragover", function() {
             vm.dt = "Drag here to upload your songs";
@@ -175,6 +181,46 @@ export default {
         }
     },
     methods: {
+        startDrag (evt, item) {
+            evt.dataTransfer.dropEffect = 'move'
+            evt.dataTransfer.effectAllowed = 'move'
+            evt.dataTransfer.setData('itemID', item.id)
+  		},
+
+  		// onDrop (evt, list) {
+  		// 	const itemID = evt.dataTransfer.getData('itemID')
+  		// 	const item = this.songs.find(item => item.id == itemID)
+        //     console.log("ITEM:", item)
+  		// 	item.list = list
+  		// },
+
+        async convertSongToFile (base64, name){
+            try {
+                const url = "data:audio/mpeg;base64,"+base64;
+                
+                const res = await fetch(url,{mode: 'no-cors'})
+                        .then(res => res.blob());
+                const file = await new File([res], name ,{ type: "audio/mpeg" });
+                return file;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async genSongObject (songs) {
+            let results = [];
+            for (let i = 0; i < songs.length; i += 4) {
+                results.push({
+                    'id': i,
+                    'title': songs[i + 0]['value'],
+                    'artist_name': songs[i + 1]['value'],
+                    'base64': songs[i + 2]['value'],
+                    'audio_file': await this.convertSongToFile(songs[i + 2]['value'], songs[i + 0]['value']),
+                    'url': songs[i + 3]['value']
+                })
+            }
+            console.log(results);
+            return results;
+        },
         cue () {
             this.resumeStream();
             this.$root.$emit('new-cue', (this.passThrough) ? 'off' : this.id);
@@ -298,12 +344,17 @@ export default {
 
         /******** Audio Upload */
         readFile(files){
+            console.log("before here 1");
+            console.log(files);
             var vm = this
             for (var index = 0; index < files.length; index++) {
+                console.log("before here 12");
                 var file = {isImage: false, isAudio: false, isVideo: false, file: ''}
+                console.log(file);
                 var reader = new FileReader();
                 var type = files[index].type.substr(0,5);
-                
+                console.log(type);
+
                 if(type=="image"){
                 file.isImage = true;
                 file.isAudio =false;
@@ -319,12 +370,14 @@ export default {
                 }else {
                     alert("Not a picture/video/audio")
                 }
-                
                 reader.onload = function(event) {
-                    console.log(event.target.result)
+                    console.log("here 1");
                     file.file = event.target.result;
                     vm.srcs.push(file);
+                    console.log("here 2");
                 }
+                console.log(event.target.result)
+                console.log("here 3");
                 reader.readAsDataURL(files[index]);
             }
         },
@@ -333,25 +386,35 @@ export default {
             event.stopPropagation();
             event.preventDefault();
         },
+
         del(index) {
-        this.fileList.splice(index, 1);
+            this.fileList.splice(index, 1);
             if (this.fileList.length === 0) {
                 this.dt = "";
             }
+        },
+        addToFileList(item){
+            this.fileList.push(item);
         },
         tts(e) {
             this.dt = "Drag here to upload files";
         },
         ttrs(e) {
+  			const itemID = e.dataTransfer.getData('itemID')
+  			const item = this.songs.find(item => item.id == itemID)
+            item.file = item.base64;
+            if (item) this.addToFileList(item.audio_file); 
+
+            const datas_combined = new DataTransfer();
+            datas_combined.items.add(item.audio_file);
             let datas =  e.target.files || e.dataTransfer.files;
-            
             var i
             for (i = 0; i < datas.length; i++) {
-                this.fileList.push(datas[i])
+                this.addToFileList(datas[i]); //update FileList object
+                datas_combined.items.add(datas[i]); 
             }
-            
-            this.readFile(datas)
-            this.queueNewFiles(datas)
+            console.log("Data Combined:", datas_combined);
+            this.readFile(datas_combined.files);
             
             e.stopPropagation();
             e.preventDefault();
