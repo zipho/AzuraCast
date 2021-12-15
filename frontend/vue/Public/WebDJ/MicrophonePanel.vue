@@ -105,7 +105,7 @@ export default {
             this.$root.$emit('new-cue', (this.passThrough) ? 'off' : 'microphone');
         },
         onNewCue: function (new_cue) {
-            this.passThrough = (new_cue === 'microphone');
+            this.passThrough = (new_cue === 'microphone'); 
         },
         toggleRecording: function () {
             this.resumeStream();

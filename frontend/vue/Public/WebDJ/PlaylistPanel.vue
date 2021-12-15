@@ -84,7 +84,8 @@
 
         <div class="list-group list-group-flush" v-if="files.length > 0">
             <a href="#" class="list-group-item list-group-item-action flex-column align-items-start"
-               v-for="(rowFile, rowIndex) in files" v-bind:class="{ active: rowIndex == fileIndex }"
+               v-for="(rowFile, rowIndex) in files" 
+               v-bind:class="{ active: rowIndex == fileIndex }"
                v-on:click.prevent="play({ fileIndex: rowIndex })">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-0">{{
@@ -151,6 +152,7 @@ export default {
 
         this.$root.$on('new-mixer-value', this.setMixGain);
         this.$root.$on('new-cue', this.onNewCue);
+        this.$root.$on('queue-vsounds-audio', this.addNewFiles);
     },
     filters: {
         prettifyTime (time) {
@@ -195,17 +197,28 @@ export default {
             }
         },
 
-        addNewFiles (newFiles) {
-            console.log(newFiles)
+        addNewFiles (newFiles, metadata=null) {
+            console.log('NEW FILES:', newFiles);
             _.each(newFiles, (file) => {
-                file.readTaglibMetadata((data) => {
+                console.log('NEW FILE:', file);
+                if (metadata === null){
+                    file.readTaglibMetadata((data) => {
+                        console.log('NEW DATA:', data);
+                        this.files.push({
+                            file: file,
+                            audio: data.audio,
+                            metadata: data.metadata || { title: '', artist: '' }
+                        });
+                    });
+                }else{
                     this.files.push({
                         file: file,
-                        audio: data.audio,
-                        metadata: data.metadata || { title: '', artist: '' }
+                        audio: metadata['audio'],
+                        metadata: metadata
                     });
-                });
+                }
             });
+            console.log('ADDED FILES:', this.files);
         },
 
         play (options) {

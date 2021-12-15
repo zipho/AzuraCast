@@ -39,8 +39,8 @@
                     <audio controls :src="srcs[index].file" class="col"></audio>
                 </li>
                 <button @click="del(index)" class="w-33 btn btn-lg btn-danger">Remove</button>
-                <button @click="add(index)" class="w-33 btn btn-lg btn-success">Queue > Playlist 1</button>
-                <button @click="add(index)" class="w-33 btn btn-lg btn-success">Queue > Playlist 2</button>
+                <button @click="queueAudio(item)" class="w-33 btn btn-lg btn-success">Queue > Playlist 1</button>
+                <button @click="queueAudio(item)" class="w-33 btn btn-lg btn-success">Queue > Playlist 2</button>
             </div>
             
             <div class="list-group list-group-flush" v-if="songs.length > 0">
@@ -125,7 +125,6 @@ export default {
 
         let vm = this;
        
-        
         document.addEventListener("dragover", function() {
             vm.dt = "Drag here to upload your songs";
         });
@@ -187,13 +186,6 @@ export default {
             evt.dataTransfer.setData('itemID', item.id)
   		},
 
-  		// onDrop (evt, list) {
-  		// 	const itemID = evt.dataTransfer.getData('itemID')
-  		// 	const item = this.songs.find(item => item.id == itemID)
-        //     console.log("ITEM:", item)
-  		// 	item.list = list
-  		// },
-
         async convertSongToFile (base64, name){
             try {
                 const url = "data:audio/mpeg;base64,"+base64;
@@ -218,7 +210,6 @@ export default {
                     'url': songs[i + 3]['value']
                 })
             }
-            console.log(results);
             return results;
         },
         cue () {
@@ -344,16 +335,11 @@ export default {
 
         /******** Audio Upload */
         readFile(files){
-            console.log("before here 1");
-            console.log(files);
             var vm = this
             for (var index = 0; index < files.length; index++) {
-                console.log("before here 12");
                 var file = {isImage: false, isAudio: false, isVideo: false, file: ''}
-                console.log(file);
                 var reader = new FileReader();
                 var type = files[index].type.substr(0,5);
-                console.log(type);
 
                 if(type=="image"){
                 file.isImage = true;
@@ -370,15 +356,15 @@ export default {
                 }else {
                     alert("Not a picture/video/audio")
                 }
+                
+                reader.readAsDataURL(files[index]);
+                let src_loaded = false
                 reader.onload = function(event) {
-                    console.log("here 1");
                     file.file = event.target.result;
                     vm.srcs.push(file);
-                    console.log("here 2");
+                    src_loaded = true;
                 }
-                console.log(event.target.result)
-                console.log("here 3");
-                reader.readAsDataURL(files[index]);
+                if (src_loaded == false) vm.srcs.push(file);
             }
         },
         testfunc(event) {
@@ -407,13 +393,13 @@ export default {
 
             const datas_combined = new DataTransfer();
             datas_combined.items.add(item.audio_file);
+
             let datas =  e.target.files || e.dataTransfer.files;
             var i
             for (i = 0; i < datas.length; i++) {
                 this.addToFileList(datas[i]); //update FileList object
                 datas_combined.items.add(datas[i]); 
             }
-            console.log("Data Combined:", datas_combined);
             this.readFile(datas_combined.files);
             
             e.stopPropagation();
@@ -421,17 +407,25 @@ export default {
             
             this.dt = "Upload is complete, you can continue to upload";
         },
-         queueNewFiles (newFiles) {
-            console.log(newFiles)
-            _.each(newFiles, (file) => {
-                file.readTaglibMetadata((data) => {
-                    this.files.push({
-                        file: file,
-                        audio: data.audio,
-                        metadata: data.metadata || { title: '', artist: '' }
-                    });
-                });
-            });
+        queueAudio (new_audio) {
+            const new_song = new DataTransfer();
+            new_song.items.add(new_audio);
+            
+            //this needs to be updated with more metadata
+            metadata = {
+                'artist': new_audio.artist_name, 
+                'album': 'unknown for now',
+                "audio": {
+                        "length": new_audio.size,
+                        "bitrate": 256,
+                        "channels": 2,
+                        "samplerate": 44100
+                    }
+            }
+
+            this.$root.$emit('queue-vsounds-audio', new_song.files, metadata);
+
+            notify('Song queued successfully!', 'success');
         },
     }
 };
