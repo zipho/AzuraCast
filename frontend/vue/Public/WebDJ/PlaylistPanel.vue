@@ -198,12 +198,9 @@ export default {
         },
 
         addNewFiles (newFiles, metadata=null) {
-            console.log('NEW FILES:', newFiles);
             _.each(newFiles, (file) => {
-                console.log('NEW FILE:', file);
                 if (metadata === null){
                     file.readTaglibMetadata((data) => {
-                        console.log('NEW DATA:', data);
                         this.files.push({
                             file: file,
                             audio: data.audio,
@@ -218,7 +215,6 @@ export default {
                     });
                 }
             });
-            console.log('ADDED FILES:', this.files);
         },
 
         play (options) {

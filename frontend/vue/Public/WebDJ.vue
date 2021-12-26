@@ -23,8 +23,13 @@
                     <playlist-panel id="playlist_2"></playlist-panel>
                 </div>
             </div>
-            <div class="col-md-16">
-                <v-sounds-panel></v-sounds-panel>
+            <div class="row mb-4">
+                <div class="col-md-6 mb-sm-4">
+                    <v-sounds-panel id="v_sounds_1"></v-sounds-panel>
+                </div>
+                <div class="col-md-6">
+                    <v-sounds-panel id="v_sounds_2"></v-sounds-panel>
+                </div>
             </div>
         </div>
     </div>

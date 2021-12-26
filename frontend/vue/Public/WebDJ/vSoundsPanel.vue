@@ -2,7 +2,7 @@
     <div class="card text-white bg-primary mb-3">
          <div class="card-header">
             <h5 class="card-title text-white">
-                <translate key="lang_vsounds_title">vSounds Music Widget</translate>
+                {{ lang_header }}
             </h5>
         </div>
         <div class="card-body">
@@ -38,9 +38,8 @@
                     </div>
                     <audio controls :src="srcs[index].file" class="col"></audio>
                 </li>
-                <button @click="del(index)" class="w-33 btn btn-lg btn-danger">Remove</button>
-                <button @click="queueAudio(item)" class="w-33 btn btn-lg btn-success">Queue > Playlist 1</button>
-                <button @click="queueAudio(item)" class="w-33 btn btn-lg btn-success">Queue > Playlist 2</button>
+                <button @click="del(index)" class="w-33 btn btn-lg btn-danger"><icon icon="remove_circle"></icon></button>
+                <button @click="queueAudio(item)" class="w-33 btn btn-lg btn-success"><icon icon="add_to_queue"></icon></button>
             </div>
             
             <div class="list-group list-group-flush" v-if="songs.length > 0">
@@ -63,6 +62,7 @@
                         <p class="mb-0">- by {{ songItem['artist_name'] ? songItem['artist_name'] : lang_unknown_artist }}</p>
                 </a>
             </div>
+        
         </div>
     </div>
 </template>
@@ -95,6 +95,22 @@ export default {
             isAudio:false,
             isVideo:false
         };
+    },
+    computed: {
+        lang_header () {
+            return (this.id === 'v_sounds_1')
+                ? this.$gettext('vSounds Music - Source 1')
+                : this.$gettext('vSounds Music - Source 2');
+        },
+        lang_unknown_title () {
+            return this.$gettext('Unknown Title');
+        },
+        lang_unknown_artist () {
+            return this.$gettext('Unknown Artist');
+        }
+    },
+    props: {
+        id: String
     },
     async mounted() {
         try {
@@ -169,14 +185,6 @@ export default {
             } else {
                 return kbs.toFixed(2) + "KB";
             }
-        }
-    },
-    computed: {
-        lang_unknown_title () {
-            return this.$gettext('Unknown Title');
-        },
-        lang_unknown_artist () {
-            return this.$gettext('Unknown Artist');
         }
     },
     methods: {
